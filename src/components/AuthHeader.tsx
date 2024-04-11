@@ -19,7 +19,7 @@ export function AuthHeader(props: AuthHeaderProps) {
         {paragraph}{" "}
         <Link
           to={linkUrl}
-          className="font-medium text-purple-600 hover:text-purple-500"
+          className="font-medium text-neutral-600 hover:text-neutral-500"
         >
           {linkName}
         </Link>
