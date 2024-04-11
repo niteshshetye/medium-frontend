@@ -11,6 +11,9 @@ import { fixedInputClass } from "../configs/login";
 import { AuthAction } from "./AuthAction";
 import * as Yup from "yup";
 import { signup } from "../services/auth";
+import { useSetRecoilState } from "recoil";
+import { authState } from "../store/auth";
+import { SnackBarType, toasterState } from "../store/toaster";
 
 const SignupSchema = Yup.object().shape({
   email: Yup.string()
@@ -28,6 +31,13 @@ const SignupSchema = Yup.object().shape({
 });
 
 export const SignupForm = () => {
+  const setAuthState = useSetRecoilState(authState);
+  const setToastState = useSetRecoilState(toasterState);
+
+  function errorCb(message: string, type: SnackBarType) {
+    setToastState({ message, type });
+  }
+
   return (
     <Formik
       initialValues={{
@@ -40,11 +50,16 @@ export const SignupForm = () => {
         values: SignupBody,
         action: FormikHelpers<SignupBody>
       ) => {
-        function successCb() {
+        function successCb(payload: SignupBody) {
+          setAuthState(payload);
+          setToastState({
+            message: "Logged in succesfully",
+            type: SnackBarType.success,
+          });
           action.setSubmitting(false);
         }
 
-        await signup(values, successCb);
+        await signup(values, successCb, errorCb);
       }}
     >
       <Form>

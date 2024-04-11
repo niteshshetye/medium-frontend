@@ -1,6 +1,7 @@
 import { SigninBody, SignupBody } from "@niteshshetye/medium-common";
 import axios from "axios";
 import { AuthUrl, BaseURl } from "../configs/api";
+import { SnackBarType } from "../store/toaster";
 
 const authClient = axios.create({
   baseURL: BaseURl,
@@ -9,54 +10,78 @@ const authClient = axios.create({
   },
 });
 
-export async function signin(payload: SigninBody, successCb: () => void) {
+export async function signin(
+  payload: SigninBody,
+  successCb: (payload: SigninBody) => void,
+  errorCb: (message: string, type: SnackBarType) => void
+) {
   try {
     const response = await authClient.post(AuthUrl.signin, payload);
-    console.log(response);
-    successCb();
+    successCb(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         console.error(error.response);
+        errorCb(
+          error.request?.data?.message || "Somthing went wrong",
+          SnackBarType.error
+        );
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the
         // browser and an instance of
         // http.ClientRequest in node.js
         console.error(error.request);
+        errorCb(
+          error.request?.data?.message || "Somthing went wrong",
+          SnackBarType.error
+        );
       }
     }
 
     if (error instanceof Error) {
       console.error("unexpected error: ", error.message);
+      errorCb(error.message || "Somthing went wrong", SnackBarType.error);
     }
   }
 }
 
-export async function signup(payload: SignupBody, successCb: () => void) {
+export async function signup(
+  payload: SignupBody,
+  successCb: (payload: SignupBody) => void,
+  errorCb: (message: string, type: SnackBarType) => void
+) {
   try {
-    const response = authClient.post(AuthUrl.signup, payload);
-    console.log(response);
-    successCb();
+    const response = await authClient.post(AuthUrl.signup, payload);
+    successCb(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         console.error(error.response);
+        errorCb(
+          error.response?.data?.message || "Somthing went wrong",
+          SnackBarType.error
+        );
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the
         // browser and an instance of
         // http.ClientRequest in node.js
         console.error(error.request);
+        errorCb(
+          error.request?.data?.message || "Somthing went wrong",
+          SnackBarType.error
+        );
       }
     }
 
     if (error instanceof Error) {
       console.error("unexpected error: ", error.message);
+      errorCb(error.message || "Somthing went wrong", SnackBarType.error);
     }
   }
 }

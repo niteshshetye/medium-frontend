@@ -6,7 +6,7 @@ enum Env {
 export const env = Env.local;
 
 const BASE_URL = {
-  [Env.local]: "http://localhost:51397",
+  [Env.local]: "http://localhost:54506",
   [Env.staging]: "https://mediumapi.niteshshetye204.workers.dev",
 };
 
