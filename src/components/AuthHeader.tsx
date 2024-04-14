@@ -1,14 +1,27 @@
-import { Link } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { authState, IAuthInitialState } from "../store/auth";
+import { AuthType } from "../configs/auth";
 
 interface AuthHeaderProps {
   heading: string;
   paragraph: string;
-  linkUrl: string;
-  linkName: string;
+  buttonText: string;
 }
 
 export function AuthHeader(props: AuthHeaderProps) {
-  const { heading, paragraph, linkName, linkUrl = "#" } = props;
+  const { heading, paragraph, buttonText } = props;
+  const setAuthState = useSetRecoilState(authState);
+
+  function handleOnClick(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+
+    setAuthState((auth: IAuthInitialState) => {
+      return {
+        ...auth,
+        type: auth.type === AuthType.signin ? AuthType.signup : AuthType.signin,
+      };
+    });
+  }
 
   return (
     <div className="mb-10">
@@ -17,12 +30,12 @@ export function AuthHeader(props: AuthHeaderProps) {
       </h2>
       <p className="mt-2 text-center text-sm text-gray-600">
         {paragraph}{" "}
-        <Link
-          to={linkUrl}
-          className="font-medium text-neutral-600 hover:text-neutral-500"
+        <button
+          onClick={handleOnClick}
+          className="font-bold text-black hover:text-gray-700 underline"
         >
-          {linkName}
-        </Link>
+          {buttonText}
+        </button>
       </p>
     </div>
   );

@@ -3,7 +3,7 @@ enum Env {
   staging = "staging",
 }
 
-export const env = Env.local;
+export const env = Env.staging;
 
 const BASE_URL = {
   [Env.local]: "http://localhost:54506",

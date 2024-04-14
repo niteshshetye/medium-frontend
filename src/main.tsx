@@ -5,19 +5,18 @@ import "./index.css";
 import { RecoilRoot } from "recoil";
 import { BrowserRouter } from "react-router-dom";
 import { AppLayout } from "./layout/AppLayout.tsx";
+import { ThemeProvider } from "@material-tailwind/react";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RecoilRoot>
-      <div className="min-h-full h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
+      <ThemeProvider>
+        <BrowserRouter>
           <AppLayout>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
+            <App />
           </AppLayout>
-        </div>
-      </div>
+        </BrowserRouter>
+      </ThemeProvider>
     </RecoilRoot>
   </React.StrictMode>
 );

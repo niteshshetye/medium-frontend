@@ -7,13 +7,13 @@ import {
 } from "@niteshshetye/medium-common";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { AuthFormExtra } from "./AuthFormExtra";
-import { fixedInputClass } from "../configs/login";
+import { fixedInputClass } from "../configs/auth";
 import { AuthAction } from "./AuthAction";
 import * as Yup from "yup";
 import { signup } from "../services/auth";
 import { useSetRecoilState } from "recoil";
-import { authState } from "../store/auth";
 import { SnackBarType, toasterState } from "../store/toaster";
+import { authState, IAuthInitialState } from "../store/auth";
 
 const SignupSchema = Yup.object().shape({
   email: Yup.string()
@@ -50,7 +50,7 @@ export const SignupForm = () => {
         values: SignupBody,
         action: FormikHelpers<SignupBody>
       ) => {
-        function successCb(payload: SignupBody) {
+        function successCb(payload: IAuthInitialState) {
           setAuthState(payload);
           setToastState({
             message: "Logged in succesfully",

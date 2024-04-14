@@ -1,7 +1,9 @@
+import { IAuthInitialState } from "./../store/auth";
 import { SigninBody, SignupBody } from "@niteshshetye/medium-common";
 import axios from "axios";
 import { AuthUrl, BaseURl } from "../configs/api";
 import { SnackBarType } from "../store/toaster";
+import { AuthType } from "../configs/auth";
 
 const authClient = axios.create({
   baseURL: BaseURl,
@@ -12,12 +14,12 @@ const authClient = axios.create({
 
 export async function signin(
   payload: SigninBody,
-  successCb: (payload: SigninBody) => void,
+  successCb: (payload: IAuthInitialState) => void,
   errorCb: (message: string, type: SnackBarType) => void
 ) {
   try {
     const response = await authClient.post(AuthUrl.signin, payload);
-    successCb(response.data);
+    successCb({ ...response.data, isLoggedIn: true, type: AuthType.signin });
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
@@ -50,12 +52,13 @@ export async function signin(
 
 export async function signup(
   payload: SignupBody,
-  successCb: (payload: SignupBody) => void,
+  successCb: (payload: IAuthInitialState) => void,
   errorCb: (message: string, type: SnackBarType) => void
 ) {
   try {
     const response = await authClient.post(AuthUrl.signup, payload);
-    successCb(response.data);
+
+    successCb({ ...response.data, isLoggedIn: true, type: AuthType.signin });
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {

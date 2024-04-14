@@ -15,12 +15,13 @@ import {
 } from "formik";
 import * as Yup from "yup";
 import { AuthFormExtra } from "./AuthFormExtra";
-import { fixedInputClass } from "../configs/login";
+import { fixedInputClass } from "../configs/auth";
 import { AuthAction } from "./AuthAction";
 import { signin } from "../services/auth";
-import { authState } from "../store/auth";
 import { useSetRecoilState } from "recoil";
 import { SnackBarType, toasterState } from "../store/toaster";
+import { authState, IAuthInitialState } from "../store/auth";
+import { appSettingStore, IAppSettingIntialState } from "../store/app-setting";
 
 const SigninSchema = Yup.object().shape({
   email: Yup.string()
@@ -35,7 +36,7 @@ const SigninSchema = Yup.object().shape({
 
 export const SigninForm = () => {
   const setAuthState = useSetRecoilState(authState);
-
+  const setAppSetting = useSetRecoilState(appSettingStore);
   const setToastState = useSetRecoilState(toasterState);
 
   function errorCb(message: string, type: SnackBarType) {
@@ -54,8 +55,12 @@ export const SigninForm = () => {
         values: SigninBody,
         action: FormikHelpers<SigninBody>
       ) => {
-        function successCb(payload: SigninBody) {
+        function successCb(payload: IAuthInitialState) {
           setAuthState(payload);
+          setAppSetting((preValue: IAppSettingIntialState) => ({
+            ...preValue,
+            loginModal: false,
+          }));
           setToastState({
             message: "Logged in succesfully",
             type: SnackBarType.success,

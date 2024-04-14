@@ -1,6 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { Blog } from "./pages/Blog";
+import { Help } from "./pages/Help";
+import { MyProfile } from "./pages/MyProfile";
+import { Write } from "./pages/Write";
+import { Notification } from "./pages/Notification";
 import { SnackBarType, toasterState } from "./store/toaster";
 import { Toster } from "./components/Toster";
 import "./App.css";
@@ -14,6 +18,10 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Blog />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/my-profile" element={<MyProfile />} />
+        <Route path="/write" element={<Write />} />
+        <Route path="/notification" element={<Notification />} />
       </Routes>
     </>
   );

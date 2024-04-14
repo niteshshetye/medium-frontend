@@ -13,7 +13,7 @@ export function AuthAction(props: AuthActionProps) {
   return (
     <button
       type={type}
-      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-neutral-600 hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500 mt-10"
+      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500 mt-10"
       onClick={handleSubmit}
       disabled={loading || isDisabled}
     >

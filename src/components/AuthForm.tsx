@@ -1,4 +1,4 @@
-import { AuthType } from "../configs/login";
+import { AuthType } from "../configs/auth";
 import { SigninForm } from "./SigninForm";
 import { SignupForm } from "./SignUpForm";
 
