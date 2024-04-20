@@ -1,3 +1,11 @@
+import { Header } from "./components/Header";
+import { List } from "./components/List";
+
 export const Blog = () => {
-  return <div>Blog</div>;
+  return (
+    <div>
+      <Header />
+      <List />
+    </div>
+  );
 };

@@ -1,3 +1,9 @@
+import { ComingSoon } from "../../components/ComingSoon";
+
 export const MyProfile = () => {
-  return <div>MyProfile</div>;
+  return (
+    <div className="h-screen">
+      <ComingSoon />;
+    </div>
+  );
 };

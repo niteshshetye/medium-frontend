@@ -5,8 +5,10 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="w-screen">
       <NavBar />
-      {/* heading */}
-      {children}
+
+      <div className="px-4 py-4 border-4 border-solid border-red-400 mx-0 md:mx-32">
+        {children}
+      </div>
     </div>
   );
 };

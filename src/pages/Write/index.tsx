@@ -1,3 +1,9 @@
+import { ComingSoon } from "../../components/ComingSoon";
+
 export const Write = () => {
-  return <div>Write</div>;
+  return (
+    <div className="h-screen">
+      <ComingSoon />;
+    </div>
+  );
 };
