@@ -7,6 +7,8 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { useSticky } from "../../../hooks/useSticky";
+import { MediumBlog } from "./MediumBlog";
+import { ComingSoon } from "../../../components/ComingSoon";
 
 export const Header = () => {
   const { classNameString } = useSticky();
@@ -16,15 +18,12 @@ export const Header = () => {
     {
       label: "For you",
       value: "foryou",
-      desc: `It really matters and then like it really doesn't matter.
-      What matters is the people who are sparked by it. And the people 
-      who are like offended by it, it doesn't matter.`,
+      Component: MediumBlog,
     },
     {
       label: "Following",
       value: "following",
-      desc: `Because it's about motivating the doers. Because I'm here
-      to follow my dreams and inspire other people to follow their dreams, too.`,
+      Component: ComingSoon,
     },
   ];
 
@@ -60,9 +59,9 @@ export const Header = () => {
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         >
-          {data.map(({ value, desc }) => (
+          {data.map(({ value, Component }) => (
             <TabPanel key={value} value={value}>
-              {desc}
+              <Component />
             </TabPanel>
           ))}
         </TabsBody>

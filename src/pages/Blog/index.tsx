@@ -1,11 +1,11 @@
 import { Header } from "./components/Header";
-import { List } from "./components/List";
+// import { MediumBlog } from "./components/MediumBlog";
 
 export const Blog = () => {
   return (
     <div>
       <Header />
-      <List />
+      {/* <MediumBlog /> */}
     </div>
   );
 };
