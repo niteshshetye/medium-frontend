@@ -17,7 +17,7 @@ interface MediumBlogListItemProps {
 
 const MediumBlogListItem: React.FC<MediumBlogListItemProps> = ({ blog }) => {
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden p-6 my-4">
+    <div className="bg-white shadow-lg cursor-pointer rounded-lg overflow-hidden p-6 my-4">
       <div className="flex items-center py-4">
         <img
           className="h-10 w-10 rounded-full mr-4 object-cover"

@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { Blog } from "./pages/Blog";
+import { Blogs } from "./pages/Blogs";
 import { Help } from "./pages/Help";
 import { MyProfile } from "./pages/MyProfile";
 import { Write } from "./pages/Write";
@@ -17,7 +17,7 @@ function App() {
       {toastState.type !== SnackBarType.idle ? <Toster /> : null}
 
       <Routes>
-        <Route path="/" element={<Blog />} />
+        <Route path="/" element={<Blogs />} />
         <Route path="/help" element={<Help />} />
         <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/write" element={<Write />} />

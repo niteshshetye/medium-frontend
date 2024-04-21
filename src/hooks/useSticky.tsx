@@ -23,7 +23,7 @@ export const useSticky = () => {
 
   const classNameString = useMemo(
     () =>
-      `w-full transition-all duration-300 border-2 border-solid border-cyan-500 ${
+      `w-full z-10 bg-white transition-all duration-300 ${
         isSticky ? " sticky top-0 shadow-md" : ""
       }`,
     [isSticky]
