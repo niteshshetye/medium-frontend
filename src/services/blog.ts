@@ -24,45 +24,74 @@ export interface IBlog {
 }
 
 export async function fetchBlogs(
-  token: string,
-  successCb: (payload: IBlog[]) => void,
-  errorCb: (message: string, type: SnackBarType) => void
+  successCb?: (payload: IBlog[]) => void,
+  errorCb?: (message: string, type: SnackBarType) => void
 ) {
   try {
-    const response = await blogClient.get(BlogUrl.list, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await blogClient.get(BlogUrl.list);
 
-    successCb(response.data);
-    console.log(response);
+    if (successCb) {
+      successCb(response.data);
+    }
+
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         console.error(error.response);
-        errorCb(
-          error.request?.data?.message || "Somthing went wrong",
-          SnackBarType.error
-        );
+        if (errorCb) {
+          errorCb(
+            error.request?.data?.message || "Somthing went wrong",
+            SnackBarType.error
+          );
+        }
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the
         // browser and an instance of
         // http.ClientRequest in node.js
         console.error(error.request);
-        errorCb(
-          error.request?.data?.message || "Somthing went wrong",
-          SnackBarType.error
-        );
+        if (errorCb) {
+          errorCb(
+            error.request?.data?.message || "Somthing went wrong",
+            SnackBarType.error
+          );
+        }
       }
     }
 
     if (error instanceof Error) {
       console.error("unexpected error: ", error.message);
-      errorCb(error.message || "Somthing went wrong", SnackBarType.error);
+      if (errorCb) {
+        errorCb(error.message || "Somthing went wrong", SnackBarType.error);
+      }
+    }
+  }
+}
+
+export async function readBlog(id: string) {
+  try {
+    const response = await blogClient.get(`${BlogUrl.info}/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error(error.response);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the
+        // browser and an instance of
+        // http.ClientRequest in node.js
+        console.error(error.request);
+      }
+    }
+
+    if (error instanceof Error) {
+      console.error("unexpected error: ", error.message);
     }
   }
 }

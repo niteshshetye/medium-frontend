@@ -1,23 +1,24 @@
-import { atom } from "recoil";
-import { IBlog } from "../services/blog";
+import { atom, atomFamily, selector, selectorFamily } from "recoil";
+import { fetchBlogs, readBlog } from "../services/blog";
 
-export enum State {
-  idle = 1,
-  loading,
-  error,
-}
+export const blogsAtom = atom({
+  key: "blogsAtom",
+  default: selector({
+    key: "blogsSelector",
+    get: () => {
+      const response = fetchBlogs();
+      return response;
+    },
+  }),
+});
 
-export interface IBlogInitialState {
-  blogs: IBlog[];
-  state: State;
-}
-
-export const blogInitialState: IBlogInitialState = {
-  blogs: [],
-  state: State.idle,
-};
-
-export const blogState = atom({
-  key: "blogs",
-  default: blogInitialState,
+export const blogAtomFamily = atomFamily({
+  key: "blogAtomFamily",
+  default: selectorFamily({
+    key: "blogSelectorFamily",
+    get: (id: string) => () => {
+      const response = readBlog(id);
+      return response;
+    },
+  }),
 });
