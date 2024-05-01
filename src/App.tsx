@@ -9,6 +9,7 @@ import { Notification } from "./pages/Notification";
 import { SnackBarType, toasterState } from "./store/toaster";
 import { Toster } from "./components/Toster";
 import "./App.css";
+import { AppLayout } from "./layout/AppLayout";
 
 function App() {
   const toastState = useRecoilValue(toasterState);
@@ -18,12 +19,14 @@ function App() {
       {toastState.type !== SnackBarType.idle ? <Toster /> : null}
 
       <Routes>
-        <Route path="/" element={<Blogs />} />
-        <Route path="/blog/:id" element={<Blog />} />
-        <Route path="/help" element={<Help />} />
-        <Route path="/my-profile" element={<MyProfile />} />
-        <Route path="/write" element={<Write />} />
-        <Route path="/notification" element={<Notification />} />
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<Blogs />} />
+          <Route path="blog/:id" element={<Blog />} />
+          <Route path="help" element={<Help />} />
+          <Route path="my-profile" element={<MyProfile />} />
+          <Route path="write" element={<Write />} />
+          <Route path="notification" element={<Notification />} />
+        </Route>
       </Routes>
     </>
   );
