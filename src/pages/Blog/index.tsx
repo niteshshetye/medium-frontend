@@ -41,7 +41,10 @@ export const Blog = () => {
             </p>
           </div>
         </div>
-        <p className="text-gray-800 leading-relaxed mb-8">{contents.content}</p>
+        <div
+          dangerouslySetInnerHTML={{ __html: contents.content }}
+          className="text-gray-800 leading-relaxed mb-8"
+        />
       </div>
     </div>
   );

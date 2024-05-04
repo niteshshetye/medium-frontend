@@ -19,8 +19,8 @@ import {
   PencilSquareIcon,
   BellIcon,
 } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   appSettingIntialState,
   appSettingStore,
@@ -28,6 +28,8 @@ import {
 } from "../store/app-setting";
 import { authInitialState, authState } from "../store/auth";
 import { Auth } from "../model/auth";
+import { writeInitialState, writeState } from "../store/write";
+import { writeBlog } from "../services/blog";
 
 // profile menu component
 const profileMenuItems = [
@@ -47,10 +49,26 @@ const profileMenuItems = [
   },
 ];
 
+// nav list component
+const navListItems = [
+  {
+    label: "Write",
+    icon: PencilSquareIcon,
+    to: "/write",
+  },
+  {
+    icon: BellIcon,
+    to: "/notification",
+  },
+];
+
+const WRITE_ROUTE = "/write";
+
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const setAppSetting = useSetRecoilState(appSettingStore);
   const setAuthState = useSetRecoilState(authState);
+  const setWriteState = useSetRecoilState(writeState);
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -60,6 +78,7 @@ function ProfileMenu() {
 
     setAppSetting(appSettingIntialState);
     setAuthState(authInitialState);
+    setWriteState(writeInitialState);
     closeMenu();
   }
 
@@ -130,39 +149,31 @@ function ProfileMenu() {
   );
 }
 
-// nav list component
-const navListItems = [
-  {
-    label: "Write",
-    icon: PencilSquareIcon,
-    to: "/write",
-  },
-  {
-    icon: BellIcon,
-    to: "/notification",
-  },
-];
-
 function NavList() {
+  const { pathname } = useLocation();
+
   return (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
-      {navListItems.map(({ label, icon, to }, index: number) => (
-        <Link
-          key={index}
-          to={to}
-          color="gray"
-          className="font-medium text-blue-gray-500"
-        >
-          <MenuItem
-            className="flex items-center gap-2 lg:rounded-full"
-            placeholder={undefined}
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
-          >
-            {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "}
-            {label ? <span className="text-gray-900"> {label}</span> : null}
-          </MenuItem>
-        </Link>
+      {navListItems.map(({ label, icon, to }) => (
+        <React.Fragment key={to}>
+          {pathname !== to ? (
+            <Link
+              to={to}
+              color="gray"
+              className="font-medium text-blue-gray-500"
+            >
+              <MenuItem
+                className="flex items-center gap-2 lg:rounded-full"
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              >
+                {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "}
+                {label ? <span className="text-gray-900"> {label}</span> : null}
+              </MenuItem>
+            </Link>
+          ) : null}
+        </React.Fragment>
       ))}
     </ul>
   );
@@ -171,10 +182,13 @@ function NavList() {
 export function NavBar() {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const setAppSetting = useSetRecoilState(appSettingStore);
-  const { isLoggedIn } = useRecoilValue(authState);
+  const [write, setWrite] = useRecoilState(writeState);
+  const { isLoggedIn, access_token } = useRecoilValue(authState);
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
   const { loginModal } =
     useRecoilValue<IAppSettingIntialState>(appSettingStore);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.addEventListener(
@@ -190,6 +204,26 @@ export function NavBar() {
     }));
   }
 
+  function handlePublish() {
+    function successCb() {
+      navigate("/");
+      setWrite(writeInitialState);
+    }
+
+    function errorCb() {
+      navigate("/");
+      setWrite(writeInitialState);
+    }
+
+    setWrite((preValue) => ({ ...preValue, loading: true }));
+    const payload = {
+      title: write.title,
+      content: write.content,
+      successCb,
+      errorCb,
+    };
+    writeBlog(payload, access_token);
+  }
   return (
     <Navbar
       className="rounded-none p-2 lg:pl-6 w-full max-w-full"
@@ -204,6 +238,15 @@ export function NavBar() {
         <div className="flex justify-center">
           {isLoggedIn ? (
             <>
+              {pathname === WRITE_ROUTE ? (
+                <button
+                  onClick={handlePublish}
+                  className={`px-5 bg-green-500 text-white rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:bg-gray-400`}
+                  disabled={!write.content || !write.title}
+                >
+                  {write.loading ? "Loading..." : "Publish"}
+                </button>
+              ) : null}
               <div className="mx-3 hidden lg:block">
                 <NavList />
               </div>

@@ -32,7 +32,10 @@ export const Item: React.FC<MediumBlogListItemProps> = ({ blog }) => {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               {blog.title}
             </h2>
-            <p className="text-gray-700 text-base mb-4">{blog.content}</p>
+            <div
+              dangerouslySetInnerHTML={{ __html: blog.content }}
+              className="text-gray-700 text-base mb-4"
+            />
           </div>
           <div className=" md:block hidden">
             <img

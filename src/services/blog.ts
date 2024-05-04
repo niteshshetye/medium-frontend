@@ -23,6 +23,13 @@ export interface IBlog {
   };
 }
 
+export interface ICreateBlog {
+  title: string;
+  content: string;
+  successCb?: () => void;
+  errorCb?: () => void;
+}
+
 export async function fetchBlogs(
   successCb?: (payload: IBlog[]) => void,
   errorCb?: (message: string, type: SnackBarType) => void
@@ -93,5 +100,41 @@ export async function readBlog(id: string) {
     if (error instanceof Error) {
       console.error("unexpected error: ", error.message);
     }
+  }
+}
+
+export async function writeBlog(payload: ICreateBlog, token: string) {
+  const { successCb, errorCb, ...data } = payload;
+
+  try {
+    await blogClient.post(BlogUrl.create, data, {
+      headers: {
+        Authorization: `Bearar ${token}`,
+      },
+    });
+
+    if (successCb) {
+      successCb();
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error(error.response);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the
+        // browser and an instance of
+        // http.ClientRequest in node.js
+        console.error(error.request);
+      }
+    }
+
+    if (error instanceof Error) {
+      console.error("unexpected error: ", error.message);
+    }
+
+    if (errorCb) errorCb();
   }
 }

@@ -8,6 +8,18 @@ import { AuthType } from "../configs/auth";
 //   converter: JSON, // configure how values will be serialized/deserialized in storage
 // });
 
+const localStorageEffect =
+  (key: string) =>
+  ({ setSelf, onSet }: any) => {
+    const savedValue = localStorage.getItem(key);
+    if (savedValue != null) {
+      setSelf(JSON.parse(savedValue));
+    }
+    onSet((newValue: IAuthInitialState) => {
+      localStorage.setItem(key, JSON.stringify(newValue));
+    });
+  };
+
 export interface IAuthInitialState {
   access_token: string;
   id: string;
@@ -29,6 +41,7 @@ export const authInitialState = {
 export const authState = atom({
   key: "auth",
   default: authInitialState,
+  effects_UNSTABLE: [localStorageEffect("auth")],
 });
 
 export const userState = selector({
