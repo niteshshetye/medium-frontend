@@ -3,6 +3,7 @@ enum Env {
   staging = "staging",
 }
 
+// make it staging for deployment
 export const env = Env.staging;
 
 const BASE_URL = {
