@@ -66,7 +66,7 @@ export const Write = () => {
     <div className="h-screen">
       <TitleTextarea />
       <Editor
-        apiKey="g4zqmzvx4tx80ks3l9h784hvh9tkur5bi4zo4rf5f6p6xsw9"
+        apiKey={import.meta.env.VITE_APP_EDITOR_KEY}
         onInit={(_evt, editor) => (editorRef.current = editor)}
         initialValue={write.content || "<p>Press CTRL + S to save</p>"}
         init={{
